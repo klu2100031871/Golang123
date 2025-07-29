@@ -1,0 +1,66 @@
+package main
+import "fmt"
+
+type contact struct {
+	Name  string
+	Phone string
+	Email string
+}
+
+type contacts []contact
+
+func (c contacts) getAllContacts() {
+	for i, c : range contacts { // ❌ Use receiver 'c' instead of type name 'contacts'; also use := not :
+		fmt.Println(c.Name, c.Phone, c.Email)
+	}
+}
+
+func addContact(name, phone, email string) []contact {
+	newContact := contact{"Name": "Mohan", "Email": "mohan@gmail.com", "Phone": "9392666627"} // ❌ Ignores parameters passed to function
+	return append(contacts, newContact) // ❌ 'contacts' is a type, not a variable. Should append to an existing slice
+}
+
+func (c *contacts) deleteContactByName(name string) {
+	if (*c).Name == name { // ❌ c is a slice, can't access Name directly; need to loop
+		contacts.append((*c)[:i], (*c)[i+1:])) // ❌ 'contacts.append' is invalid; also 'i' is undefined
+	}
+}
+
+func (c *contacts) updateContactByName(name, email, phone string) *contacts {
+	for _, contact : range c { // ❌ Should be: for i, contact := range *c
+		if (*c).Name == name { // ❌ Same as before: need (*c)[i].Name
+			(*c).Email = email // ❌ Should be (*c)[i].Email
+			(*c).Phone = phone // ❌ Should be (*c)[i].Phone
+			return &contacts   // ❌ 'contacts' is a type, not a value. Just return 'c'
+		}
+	}
+}
+
+func (c contacts) getContactByName(name string) {
+	for _, c : range contacts { // ❌ Use receiver 'c', not type name; also use := not :
+		if c.Name == name {
+			fmt.Println(c.Name, c.Email, c.Phone)
+		}
+	}
+}
+
+func main() {
+	var choice int
+	fmt.Println("choose one option to perform operations on ContactBook")
+	fmt.Println("1.addContact 2.DisplayAllContacts 3.deleteContactByName 4.getContactByName 5.exit")
+	fmt.Scanln(&choice)
+	switch choice {
+	case 1:
+		addContact("mohan", "moehbfvhf", "vfnvrh") // ❌ Result of addContact is not stored anywhere
+	case 2:
+		getAllContacts() // ❌ No variable to call method on. Needs an instance of contacts
+	case 3:
+		deleteContactByName("mohan") // ❌ deleteContactByName is a method, needs a receiver (e.g., &contactBook)
+	case 4:
+		getContactByName("mohan") // ❌ Same: needs a variable instance of contacts
+	case 5:
+		exit // ❌ exit is undefined; use os.Exit(0)
+	default:
+		fmt.Println("Invalid option")
+	}
+}
